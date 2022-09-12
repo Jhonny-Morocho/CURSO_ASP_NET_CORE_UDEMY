@@ -28,7 +28,7 @@ namespace Backend
         public void ConfigureServices(IServiceCollection services)
         {
             //agregar un servicio
-            services.AddTransient<ReposotorioMemoria>();
+            services.AddTransient<IRepositorio,ReposotorioMemoria>();
             //end servicio
 
             services.AddControllers();

@@ -198,11 +198,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\xampp\\htdocs\\Backend\\Backend\\Backend.csproj",
+      "projectUniqueName": "C:\\xampp\\htdocs\\Backend\\CURSO_ASP_NET_CORE_UDEMY\\Backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "C:\\xampp\\htdocs\\Backend\\Backend\\Backend.csproj",
+      "projectPath": "C:\\xampp\\htdocs\\Backend\\CURSO_ASP_NET_CORE_UDEMY\\Backend\\Backend.csproj",
       "packagesPath": "C:\\Users\\Jhonny Morocho\\.nuget\\packages\\",
-      "outputPath": "C:\\xampp\\htdocs\\Backend\\Backend\\obj\\",
+      "outputPath": "C:\\xampp\\htdocs\\Backend\\CURSO_ASP_NET_CORE_UDEMY\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Jhonny Morocho\\AppData\\Roaming\\NuGet\\NuGet.Config",
