@@ -20,36 +20,36 @@ namespace Backend.Controller
             this.repositorio = repositorio;
         }
         //creamos la accion
-        [HttpGet]
-        public List<Genero> Get()
+        [HttpGet("listado")]
+        public ActionResult<List<Genero>> Get()
         {
             return repositorio.ObtenerTodosLosGeneros();
         }
-        [HttpGet]
-        public Genero Get(int id)
+        [HttpGet("{id:int}")]
+        public ActionResult<Genero> Get(int id)
         {
             var genero= repositorio.ObtenerGeneroPorID(id);
 
             if (genero==null)
             {
-                //return NotFound();
+                return NotFound();
             }
             return genero;
         }
         [HttpPost]
-        public void Post()
+        public ActionResult Post()
         {
-
+            return NoContent();
         }
         [HttpPut]
-        public void Put()
+        public ActionResult Put()
         {
-
+            return NoContent();
         }
         [HttpDelete]
-        public void Delete()
+        public ActionResult Delete()
         {
-
+            return NoContent();
         }
     }
 }
