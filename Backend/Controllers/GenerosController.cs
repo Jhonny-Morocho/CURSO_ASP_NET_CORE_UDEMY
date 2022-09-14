@@ -26,13 +26,14 @@ namespace Backend.Controller
             return repositorio.ObtenerTodosLosGeneros();
         }
         [HttpGet("{id:int}")]
-        public ActionResult<Genero> Get(int id)
+        //task= promesa
+        public async Task<ActionResult<Genero>> Get(int id)
         {
-            var genero= repositorio.ObtenerGeneroPorID(id);
+            var genero=await repositorio.ObtenerGeneroPorID(id);
 
             if (genero==null)
             {
-                return NotFound();
+                return NotFound(); 
             }
             return genero;
         }
