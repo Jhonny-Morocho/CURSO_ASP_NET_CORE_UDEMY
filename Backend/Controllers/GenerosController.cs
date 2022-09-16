@@ -2,6 +2,7 @@
 using Backend.Repositorios;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 namespace Backend.Controller
 {
     [Microsoft.AspNetCore.Mvc.Route("api/generos")]
+    //con este controlo los validor
+    [ApiController]
     public class GenerosController:ControllerBase
     {
         private readonly IRepositorio repositorio;
@@ -27,8 +30,12 @@ namespace Backend.Controller
         }
         [HttpGet("{id:int}")]
         //task= promesa
-        public async Task<ActionResult<Genero>> Get(int id)
+        public async Task<ActionResult<Genero>> Get(int id,[FromHeader] string nombre)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var genero=await repositorio.ObtenerGeneroPorID(id);
 
             if (genero==null)
@@ -37,13 +44,29 @@ namespace Backend.Controller
             }
             return genero;
         }
+        //public async Task<ActionResult<Genero>> Get(int id, [BindRequired] string nombre)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+        //    var genero = await repositorio.ObtenerGeneroPorID(id);
+
+        //    if (genero == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return genero;
+        //}
+
+
         [HttpPost]
-        public ActionResult Post()
+        public ActionResult Post([FromBody] Genero genero)
         {
             return NoContent();
         }
         [HttpPut]
-        public ActionResult Put()
+        public ActionResult Put([FromBody] Genero genero)
         {
             return NoContent();
         }
