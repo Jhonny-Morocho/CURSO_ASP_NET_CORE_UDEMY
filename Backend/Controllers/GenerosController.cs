@@ -3,6 +3,7 @@ using Backend.Repositorios;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,21 +18,25 @@ namespace Backend.Controller
     public class GenerosController:ControllerBase
     {
         private readonly IRepositorio repositorio;
+        private readonly ILogger<GenerosController> logger;
 
-        public GenerosController(IRepositorio repositorio)
+        public GenerosController(IRepositorio repositorio,ILogger<GenerosController> logger)
         {
             this.repositorio = repositorio;
+            this.logger = logger;
         }
         //creamos la accion
         [HttpGet("listado")]
         public ActionResult<List<Genero>> Get()
         {
+            logger.LogInformation("VAMOS A MOSTRAR LOS GENEROS");
             return repositorio.ObtenerTodosLosGeneros();
         }
         [HttpGet("{id:int}")]
         //task= promesa
         public async Task<ActionResult<Genero>> Get(int id,[FromHeader] string nombre)
         {
+            logger.LogDebug("obteniendo un genero por id "+id);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -40,9 +45,17 @@ namespace Backend.Controller
 
             if (genero==null)
             {
+                logger.LogWarning("NO PUDIMOS ECONTRAR EL GENERO DE ID "+id);
                 return NotFound(); 
             }
             return genero;
+        }
+        [HttpGet("guid")]
+        //task= promesa
+        public ActionResult<Guid> GetGUID()
+        {
+        
+            return repositorio.obtenerGUI();
         }
         //public async Task<ActionResult<Genero>> Get(int id, [BindRequired] string nombre)
         //{

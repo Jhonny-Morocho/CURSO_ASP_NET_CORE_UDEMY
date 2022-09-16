@@ -28,7 +28,11 @@ namespace Backend
         public void ConfigureServices(IServiceCollection services)
         {
             //agregar un servicio
-            services.AddTransient<IRepositorio,ReposotorioMemoria>();
+            //********* CICLO DE VIDA DE UN SERVICIO *****//
+
+            //services.AddScoped<IRepositorio, ReposotorioMemoria>();//se envia la misma instancia
+
+            services.AddScoped<IRepositorio,ReposotorioMemoria>();//difentes intancias para cada peticion
             //end servicio
 
             services.AddControllers();

@@ -1,4 +1,5 @@
 ﻿using Backend.Entidades;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Backend.Repositorios
     {
         private List<Genero> _generos ;
 
-        public ReposotorioMemoria()
+        public ReposotorioMemoria(ILogger<ReposotorioMemoria> logger)
         {
             _generos = new List<Genero>()
             {
@@ -19,7 +20,15 @@ namespace Backend.Repositorios
                 new Genero(){Id=2,Nombre="Drama"},
                 new Genero(){Id=2,Nombre="Documentales"},
             };
+            _guid = Guid.NewGuid();//
         }
+        //provanto ciclo de vida de un servici con un ejemplo
+        public Guid _guid;
+        public Guid obtenerGUI()
+        {
+            return _guid;
+        }
+       
         public List<Genero> ObtenerTodosLosGeneros()
         {
             return _generos;
