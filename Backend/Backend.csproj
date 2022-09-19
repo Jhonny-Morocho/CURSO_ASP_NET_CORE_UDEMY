@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EM.UsingSwagger" Version="1.0.8" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Invio.Extensions.Authentication.JwtBearer" Version="2.0.1" />
+    <PackageReference Include="Nancy.Authentication.JwtBearer" Version="1.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 

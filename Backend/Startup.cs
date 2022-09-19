@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Nancy.Authentication.JwtBearer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,12 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // filtro a nivel del cache
+            services.AddResponseCaching();
+            // JwtBearerDefaults
+            services.AddAuthentication(JwtBearerDefaults.Scheme).AddJwtBearer();
+
             //agregar un servicio
             //********* CICLO DE VIDA DE UN SERVICIO *****//
 
@@ -95,6 +102,10 @@ namespace Backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            //aqui llamo al cachce
+            app.UseResponseCaching();
+            //autenticacion
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

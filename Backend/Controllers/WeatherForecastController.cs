@@ -41,5 +41,10 @@ namespace Backend.Controller
             })
             .ToArray();
         }
+        [HttpGet("guid")]
+        public Guid obtenerGUIWeatherForecastController()
+        {
+            return repositorio.obtenerGUI();
+        }
     }
 }

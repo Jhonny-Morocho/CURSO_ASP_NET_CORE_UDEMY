@@ -1,5 +1,6 @@
 ﻿using Backend.Entidades;
 using Backend.Repositorios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -15,6 +16,8 @@ namespace Backend.Controller
     [Microsoft.AspNetCore.Mvc.Route("api/generos")]
     //con este controlo los validor
     [ApiController]
+    //filtro de autenticacion
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class GenerosController:ControllerBase
     {
         private readonly IRepositorio repositorio;
@@ -27,6 +30,9 @@ namespace Backend.Controller
         }
         //creamos la accion
         [HttpGet("listado")]
+        //aqui estot colocando un filtro
+        //[ResponseCache(Duration =60)]
+        
         public ActionResult<List<Genero>> Get()
         {
             logger.LogInformation("VAMOS A MOSTRAR LOS GENEROS");
