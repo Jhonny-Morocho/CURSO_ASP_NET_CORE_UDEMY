@@ -1,4 +1,5 @@
 ﻿using Backend.Entidades;
+using Backend.Filtros;
 using Backend.Repositorios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -17,7 +18,7 @@ namespace Backend.Controller
     //con este controlo los validor
     [ApiController]
     //filtro de autenticacion
-    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class GenerosController:ControllerBase
     {
         private readonly IRepositorio repositorio;
@@ -32,7 +33,7 @@ namespace Backend.Controller
         [HttpGet("listado")]
         //aqui estot colocando un filtro
         //[ResponseCache(Duration =60)]
-        
+        [ServiceFilter(typeof(MiFiltroAccion))]
         public ActionResult<List<Genero>> Get()
         {
             logger.LogInformation("VAMOS A MOSTRAR LOS GENEROS");
@@ -51,6 +52,7 @@ namespace Backend.Controller
 
             if (genero==null)
             {
+                throw new ApplicationException($"El genero de id {id} no fue encontrado");
                 logger.LogWarning("NO PUDIMOS ECONTRAR EL GENERO DE ID "+id);
                 return NotFound(); 
             }

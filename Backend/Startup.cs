@@ -1,3 +1,4 @@
+using Backend.Filtros;
 using Backend.Repositorios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,8 +44,12 @@ namespace Backend
 
             services.AddScoped<IRepositorio,ReposotorioMemoria>();//difentes intancias para cada peticion
             //end servicio
+            services.AddTransient<MiFiltroAccion>();
 
-            services.AddControllers();
+            //registrar un filtro personalizado de exepcion en mi app
+            services.AddControllers(options=> {
+                options.Filters.Add(typeof(FiltroExepcion));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend", Version = "v1" });
@@ -76,7 +81,7 @@ namespace Backend
                     contex.Response.Body = respuestaOriginal;
 
 
-                    logger.LogInformation(respuesta);
+                    //logger.LogInformation(respuesta);
 
 
                 }
