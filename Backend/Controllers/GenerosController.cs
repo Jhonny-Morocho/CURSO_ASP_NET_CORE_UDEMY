@@ -1,6 +1,5 @@
 ﻿using Backend.Entidades;
 using Backend.Filtros;
-using Backend.Repositorios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -21,50 +20,25 @@ namespace Backend.Controller
     //[Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class GenerosController:ControllerBase
     {
-        private readonly IRepositorio repositorio;
         private readonly ILogger<GenerosController> logger;
 
-        public GenerosController(IRepositorio repositorio,ILogger<GenerosController> logger)
+        public GenerosController(ILogger<GenerosController> logger)
         {
-            this.repositorio = repositorio;
             this.logger = logger;
         }
         //creamos la accion
-        [HttpGet("listado")]
-        //aqui estot colocando un filtro
-        //[ResponseCache(Duration =60)]
-        [ServiceFilter(typeof(MiFiltroAccion))]
+        [HttpGet]
         public ActionResult<List<Genero>> Get()
         {
-            logger.LogInformation("VAMOS A MOSTRAR LOS GENEROS");
-            return repositorio.ObtenerTodosLosGeneros();
+            return new List<Genero>() { new Genero() { Id=1,Nombre="Comedia"} };
         }
         [HttpGet("{id:int}")]
         //task= promesa
-        public async Task<ActionResult<Genero>> Get(int id,[FromHeader] string nombre)
+        public async Task<ActionResult<Genero>> Get(int id)
         {
-            logger.LogDebug("obteniendo un genero por id "+id);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var genero=await repositorio.ObtenerGeneroPorID(id);
+            throw new NotImplementedException();
+        }
 
-            if (genero==null)
-            {
-                throw new ApplicationException($"El genero de id {id} no fue encontrado");
-                logger.LogWarning("NO PUDIMOS ECONTRAR EL GENERO DE ID "+id);
-                return NotFound(); 
-            }
-            return genero;
-        }
-        [HttpGet("guid")]
-        //task= promesa
-        public ActionResult<Guid> GetGUID()
-        {
-        
-            return repositorio.obtenerGUI();
-        }
         //public async Task<ActionResult<Genero>> Get(int id, [BindRequired] string nombre)
         //{
         //    if (!ModelState.IsValid)
@@ -84,17 +58,17 @@ namespace Backend.Controller
         [HttpPost]
         public ActionResult Post([FromBody] Genero genero)
         {
-            return NoContent();
+            throw new NotImplementedException();
         }
         [HttpPut]
         public ActionResult Put([FromBody] Genero genero)
         {
-            return NoContent();
+            throw new NotImplementedException();
         }
         [HttpDelete]
         public ActionResult Delete()
         {
-            return NoContent();
+            throw new NotImplementedException();
         }
     }
 }

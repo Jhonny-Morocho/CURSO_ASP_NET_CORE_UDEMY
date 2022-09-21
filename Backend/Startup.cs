@@ -1,5 +1,4 @@
 using Backend.Filtros;
-using Backend.Repositorios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,8 +31,7 @@ namespace Backend
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // filtro a nivel del cache
-            services.AddResponseCaching();
+
             // JwtBearerDefaults
             services.AddAuthentication(JwtBearerDefaults.Scheme).AddJwtBearer();
 
@@ -42,9 +40,7 @@ namespace Backend
 
             //services.AddScoped<IRepositorio, ReposotorioMemoria>();//se envia la misma instancia
 
-            services.AddScoped<IRepositorio,ReposotorioMemoria>();//difentes intancias para cada peticion
-            //end servicio
-            services.AddTransient<MiFiltroAccion>();
+     
 
             //registrar un filtro personalizado de exepcion en mi app
             services.AddControllers(options=> {
@@ -58,43 +54,9 @@ namespace Backend
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         //
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //solo para probar
-            //app.Run(async context=> {
-            //    await context.Response.WriteAsync("Estoy interceptando el pipiline");
-            //});
-
-            //ejecuta esta linena y sigue la siguiente no la para
-            app.Use(async (contex,next)=> {
-                using (var swapStream=new MemoryStream())
-                {
-                    var respuestaOriginal = contex.Response.Body;
-                    contex.Response.Body = swapStream;
-                    await next.Invoke();
-
-                    swapStream.Seek(0, SeekOrigin.Begin);
-                    string respuesta = new StreamReader(swapStream).ReadToEnd();
-                    swapStream.Seek(0,SeekOrigin.Begin);
-
-                    await swapStream.CopyToAsync(respuestaOriginal);
-                    contex.Response.Body = respuestaOriginal;
-
-
-                    //logger.LogInformation(respuesta);
-
-
-                }
-            });
-
-            app.Map("/map1",(app)=> {
-                app.Run(async context=>
-                {
-                    await context.Response.WriteAsync("Estoy incertando el pipeline"); 
-                });
-            });
-
-
+   
             if (env.IsDevelopment())
             {
                 //definiendo milleword
@@ -107,8 +69,6 @@ namespace Backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //aqui llamo al cachce
-            app.UseResponseCaching();
             //autenticacion
             app.UseAuthentication();
 
