@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,7 +31,17 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            //db context
+            services.AddDbContext<AplicationDbContext>(options=> 
+                options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+            //configurar los cors con url dinamicas
+            var frontend_ul = Configuration.GetValue<string>("frotend_url");
+            services.AddCors(options=>
+            {
+                options.AddDefaultPolicy(builder=> {
+                    builder.WithOrigins(frontend_ul).AllowAnyMethod().AllowAnyHeader();
+                });
+            });
 
             // JwtBearerDefaults
             services.AddAuthentication(JwtBearerDefaults.Scheme).AddJwtBearer();
@@ -69,6 +80,7 @@ namespace Backend
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
             //autenticacion
             app.UseAuthentication();
 

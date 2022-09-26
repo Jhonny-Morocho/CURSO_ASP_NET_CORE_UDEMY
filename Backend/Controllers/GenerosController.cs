@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,18 @@ namespace Backend.Controller
     public class GenerosController:ControllerBase
     {
         private readonly ILogger<GenerosController> logger;
+        private readonly AplicationDbContext context;
 
-        public GenerosController(ILogger<GenerosController> logger)
+        public GenerosController(ILogger<GenerosController> logger,AplicationDbContext context) 
         {
             this.logger = logger;
+            this.context = context;
         }
         //creamos la accion
         [HttpGet]
-        public ActionResult<List<Genero>> Get()
+        public async Task<ActionResult<List<Genero>>> Get()
         {
-            return new List<Genero>() { new Genero() { Id=1,Nombre="Comedia"} };
+            return await context.Generos.ToListAsync();
         }
         [HttpGet("{id:int}")]
         //task= promesa
@@ -56,9 +59,11 @@ namespace Backend.Controller
 
 
         [HttpPost]
-        public ActionResult Post([FromBody] Genero genero)
+        public async Task<ActionResult> Post([FromBody] Genero genero)
         {
-            throw new NotImplementedException();
+            context.Add(genero);
+            await context.SaveChangesAsync();
+            return NoContent();
         }
         [HttpPut]
         public ActionResult Put([FromBody] Genero genero)
