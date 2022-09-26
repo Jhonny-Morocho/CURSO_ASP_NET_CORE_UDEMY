@@ -1,4 +1,6 @@
-﻿using Backend.Entidades;
+﻿using AutoMapper;
+using Backend.DTO;
+using Backend.Entidades;
 using Backend.Filtros;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -23,17 +25,23 @@ namespace Backend.Controller
     {
         private readonly ILogger<GenerosController> logger;
         private readonly AplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public GenerosController(ILogger<GenerosController> logger,AplicationDbContext context) 
+        public GenerosController(ILogger<GenerosController> logger,
+                                AplicationDbContext context,
+                                IMapper mapper) 
         {
             this.logger = logger;
             this.context = context;
+            this.mapper = mapper;
         }
         //creamos la accion
         [HttpGet]
-        public async Task<ActionResult<List<Genero>>> Get()
+        public async Task<ActionResult<List<GeneroDTO>>> Get()
         {
-            return await context.Generos.ToListAsync();
+            var generos= await context.Generos.ToListAsync();
+            return mapper.Map<List<GeneroDTO>>(generos);
+
         }
         [HttpGet("{id:int}")]
         //task= promesa
@@ -42,25 +50,12 @@ namespace Backend.Controller
             throw new NotImplementedException();
         }
 
-        //public async Task<ActionResult<Genero>> Get(int id, [BindRequired] string nombre)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var genero = await repositorio.ObtenerGeneroPorID(id);
-
-        //    if (genero == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return genero;
-        //}
-
+  
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Genero genero)
+        public async Task<ActionResult> Post([FromBody] GeneroCreacionDTO generoCreacionDTO)
         {
+            var genero = mapper.Map<Genero>(generoCreacionDTO);
             context.Add(genero);
             await context.SaveChangesAsync();
             return NoContent();

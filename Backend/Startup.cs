@@ -31,6 +31,8 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //automaper para DTO
+            services.AddAutoMapper(typeof(Startup));
             //db context
             services.AddDbContext<AplicationDbContext>(options=> 
                 options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
