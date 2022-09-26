@@ -10,7 +10,7 @@ namespace Backend.Utilidades
 {
     public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles(string profileName) : base(profileName)
+        public AutoMapperProfiles()
         {
             CreateMap<Genero, GeneroDTO>();
             CreateMap<GeneroCreacionDTO, Genero>();

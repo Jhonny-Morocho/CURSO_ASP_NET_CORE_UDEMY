@@ -41,7 +41,9 @@ namespace Backend
             services.AddCors(options=>
             {
                 options.AddDefaultPolicy(builder=> {
-                    builder.WithOrigins(frontend_ul).AllowAnyMethod().AllowAnyHeader();
+
+                    builder.WithOrigins(frontend_ul).AllowAnyMethod().
+                    AllowAnyHeader().WithExposedHeaders(new string[] { "cantidadTotalRegistros" });
                 });
             });
 

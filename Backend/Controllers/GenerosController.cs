@@ -2,6 +2,7 @@
 using Backend.DTO;
 using Backend.Entidades;
 using Backend.Filtros;
+using Backend.Utilidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -37,11 +38,21 @@ namespace Backend.Controller
         }
         //creamos la accion
         [HttpGet]
-        public async Task<ActionResult<List<GeneroDTO>>> Get()
+        public async Task<ActionResult<List<GeneroDTO>>> Get([FromQuery] PaginacionDTO paginacionDTO)
         {
-            var generos= await context.Generos.ToListAsync();
-            return mapper.Map<List<GeneroDTO>>(generos);
+            try {
+                var queryable=  context.Generos.AsQueryable();
+                await HttpContext.InsertarParametrosPaginacionEnCabezera(queryable);
+                var generos =await queryable.OrderBy(x=>x.Nombre).Paginar(paginacionDTO).ToListAsync();
+                return mapper.Map<List<GeneroDTO>>(generos);
+            }
+            catch (Exception e)
+            {
 
+                throw new ApplicationException($"ERROR EN EL CONTROLADOR GENERO "+e.Message);
+                logger.LogWarning("LOG EN EL CONTROLADOR");
+                return NotFound();
+            }
         }
         [HttpGet("{id:int}")]
         //task= promesa
