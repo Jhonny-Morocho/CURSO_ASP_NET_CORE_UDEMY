@@ -77,15 +77,30 @@ namespace Backend.Controller
             await context.SaveChangesAsync();
             return NoContent();
         }
-        [HttpPut]
-        public ActionResult Put([FromBody] Genero genero)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put([FromBody] GeneroCreacionDTO generoCreacionDTO,int id)
         {
-            throw new NotImplementedException();
+            var genero = await context.Generos.FirstOrDefaultAsync(x => x.Id == id);
+            if (genero == null)
+            {
+                //http 404
+                return NotFound();
+            }
+            genero = mapper.Map(generoCreacionDTO,genero);
+            await context.SaveChangesAsync();
+            return NoContent();
         }
-        [HttpDelete]
-        public ActionResult Delete()
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            var existe = await context.Generos.AnyAsync(x=>x.Id==id);
+            if (!existe)
+            {
+                return NotFound();
+            }
+            context.Remove(new Genero() { Id=id});
+            await context.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
