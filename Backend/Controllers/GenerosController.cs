@@ -56,9 +56,15 @@ namespace Backend.Controller
         }
         [HttpGet("{id:int}")]
         //task= promesa
-        public async Task<ActionResult<Genero>> Get(int id)
+        public async Task<ActionResult<GeneroDTO>> Get(int id)
         {
-            throw new NotImplementedException();
+            var genero =await context.Generos.FirstOrDefaultAsync(x=>x.Id==id);
+            if (genero==null)
+            {
+                //http 404
+                return NotFound();
+            }
+            return mapper.Map<GeneroDTO>(genero);
         }
 
   
